@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <stdlib.h>
+
+
+int main(int x, char *argv[]){
+  int sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+  struct sockaddr_in server_address;
+  memset(&server_address, 0, sizeof(server_address));
+  int ip = inet_pton(AF_INET, "127.0.0.1", &server_address.sin_addr.s_addr);
+  if(ip <=0 )
+    exit(10);
+  server_address.sin_family = AF_INET;
+  server_address.sin_port = htons(5000);
+  if(connect(sock, (struct sockaddr *) &server_address, sizeof(server_address))<0)
+    exit(1);
+  char *echoString = "hola";
+  size_t echoStringLength = strlen(echoString);
+  ssize_t numBytes = send(sock, echoString, echoStringLength, 0);
+  if(numBytes != echoStringLength)
+    exit(2);
+  exit(15);
+  char buffer[BUFSIZ];
+  numBytes = recv(sock, buffer, BUFSIZ -1, 0);
+  if(numBytes != echoStringLength)
+    exit(3);
+  fputs(buffer, stdout);
+  return 0; 
+}

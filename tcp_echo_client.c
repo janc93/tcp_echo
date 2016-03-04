@@ -13,22 +13,26 @@ int main(int x, char *argv[]){
   struct sockaddr_in server_address;
   memset(&server_address, 0, sizeof(server_address));
   int ip = inet_pton(AF_INET, "127.0.0.1", &server_address.sin_addr.s_addr);
-  if(ip <=0 )
-    exit(10);
   server_address.sin_family = AF_INET;
   server_address.sin_port = htons(5000);
   if(connect(sock, (struct sockaddr *) &server_address, sizeof(server_address))<0)
-    exit(1);
-  char *echoString = "hola";
+    exit(5);
+  char *echoString = "hi";
   size_t echoStringLength = strlen(echoString);
   ssize_t numBytes = send(sock, echoString, echoStringLength, 0);
   if(numBytes != echoStringLength)
     exit(2);
-  exit(15);
   char buffer[BUFSIZ];
-  numBytes = recv(sock, buffer, BUFSIZ -1, 0);
-  if(numBytes != echoStringLength)
-    exit(3);
-  fputs(buffer, stdout);
+  int counter = 0;
+  while(counter < echoStringLength){
+    numBytes = recv(sock, buffer, BUFSIZ -1, 0);
+    counter += numBytes;
+    if(numBytes != echoStringLength)
+      exit(3);
+    buffer[numBytes] = '\0';
+    fputs(buffer, stdout);
+  }
+  close(sock);
+  printf("\n");
   return 0; 
 }

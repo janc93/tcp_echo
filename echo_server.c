@@ -37,8 +37,8 @@ int main(){
 		int clientSocket = accept(serverSocket,(struct sockaddr*) &clientAddress, &clientAddrLen);
 		char clientIP[INET_ADDRSTRLEN];
 		inet_ntop(AF_INET, &clientAddress.sin_addr.s_addr, clientIP, sizeof(clientIP));
-		printf("SOURCE IP   : %s \n", clientIP);
-		printf("SOCKET USED : %d \n",ntohs(clientAddress.sin_port));
+		printf("Fuente: %s \n", clientIP);
+		printf("Socket: %d \n",ntohs(clientAddress.sin_port));
 		printf("Date and Time\n\n");
 		handleTCPTimeClient(clientSocket);
 	}

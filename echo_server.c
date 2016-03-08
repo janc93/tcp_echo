@@ -39,7 +39,6 @@ int main(){
 		inet_ntop(AF_INET, &clientAddress.sin_addr.s_addr, clientIP, sizeof(clientIP));
 		printf("Fuente: %s \n", clientIP);
 		printf("Socket: %d \n",ntohs(clientAddress.sin_port));
-		printf("Date and Time\n\n");
 		handleTCPTimeClient(clientSocket);
 	}
 
